@@ -1,0 +1,140 @@
+apply plugin: 'com.android.application'
+
+android {
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.fusi24.android.baseskelton"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE'
+
+        return void
+    }
+}
+
+dependencies {
+
+    // ANDROID SUPPORT
+    implementation "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+    implementation("com.android.support:support-v13:$rootProject.supportLibraryVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
+    implementation("com.android.support:appcompat-v7:$rootProject.supportLibraryVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+    }
+    implementation("com.android.support:design:$rootProject.supportLibraryVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
+    implementation("com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    implementation("com.android.support:cardview-v7:$rootProject.supportLibraryVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+
+    // VIEW INJECTION
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"
+    implementation("com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-compact'
+    }
+
+    // RX
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJavaVersion"
+    implementation("io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxAndroidVersion") {
+        exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
+    }
+
+    // NETWORK
+    implementation "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
+    implementation "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttpVersion"
+    implementation("com.squareup.okhttp3:okhttp-urlconnection:$rootProject.ext.okHttpVersion") {
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+    }
+    implementation("com.squareup.okhttp3:logging-interceptor:$rootProject.ext.okHttpVersion") {
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+    }
+    implementation("com.squareup.retrofit2:retrofit:$rootProject.ext.retrofitVersion") {
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+    }
+    implementation("com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofitVersion") {
+        exclude group: 'com.squareup.retrofit2', module: 'retrofit'
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    implementation("com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.retrofitVersion") {
+        exclude group: 'com.squareup.retrofit2', module: 'retrofit'
+        exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
+    }
+    implementation "com.squareup.picasso:picasso:$rootProject.ext.picassoVersion"
+
+    // NAVIGATION
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha05'
+    implementation 'android.arch.navigation:navigation-ui:1.0.0-alpha05'
+
+    // LOGGING
+    implementation "com.jakewharton.timber:timber:$rootProject.ext.timberVersion"
+
+    testImplementation "junit:junit:$rootProject.ext.junitVersion"
+    testImplementation "org.mockito:mockito-core:$rootProject.ext.mockitoVersion"
+    testImplementation "android.arch.core:core-testing:$rootProject.ext.lifecycleVersion"
+
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+/*
+Resolves dependency versions across test and production APKs, specifically, transitive
+dependencies. This is required since Espresso internally has a dependency on support-annotations.
+*/
+configurations.all {
+    resolutionStrategy.force "com.android.support:support-annotations:$rootProject.supportLibraryVersion"
+}
+
+/*
+All direct/transitive dependencies shared between your test and production APKs need to be
+excluded from the test APK! This is necessary because both APKs will contain the same classes. Not
+excluding these dependencies from your test configuration will result in an dex pre-verifier error
+at runtime. More info in this tools bug: (https://code.google.com/p/android/issues/detail?id=192497)
+*/
+configurations.compile.dependencies.each { compileDependency ->
+    println "Excluding compile dependency: ${compileDependency.getName()}"
+    configurations.androidTestCompile.dependencies.each { androidTestCompileDependency ->
+        configurations.androidTestCompile.exclude module: "${compileDependency.getName()}"
+    }
+}
