@@ -12,12 +12,12 @@ import retrofit2.http.Query;
 
 public interface RestService {
 
-    @GET("users")
+    @GET("/users")
     Observable<List<User>> getUserAll();
 
-    @GET("albums")
+    @GET("/albums")
     Observable<List<Album>> getAlbumAllByUser(@Query("userId") Integer userId);
 
-    @GET("photos")
+    @GET("/photos")
     Observable<List<Photo>> getPhotoAllByAlbum(@Query("albumId") Integer albumId);
 }

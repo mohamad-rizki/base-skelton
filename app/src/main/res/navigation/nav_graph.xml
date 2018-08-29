@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/userFragment">
+
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.fusi24.android.baseskelton.ui.user.UserFragment"
+        android:label="@string/menu_user"
+        tools:layout="@layout/fragment_user">
+
+        <action
+            android:id="@+id/action_userFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/albumFragment"
+        android:name="com.fusi24.android.baseskelton.ui.album.AlbumFragment"
+        android:label="@string/menu_album"
+        tools:layout="@layout/fragment_album">
+
+        <action
+            android:id="@+id/action_albumFragment_to_photoFragment"
+            app:destination="@id/photoFragment" />
+
+        <argument
+            android:name="user_id"
+            android:defaultValue="0" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/photoFragment"
+        android:name="com.fusi24.android.baseskelton.ui.photo.PhotoFragment"
+        android:label="@string/menu_photo"
+        tools:layout="@layout/fragment_photo">
+
+        <argument
+            android:name="album_id"
+            android:defaultValue="0" />
+
+    </fragment>
+
+</navigation>

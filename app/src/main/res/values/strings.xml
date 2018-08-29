@@ -1,3 +1,9 @@
 <resources>
+
     <string name="app_name">Base Skelton</string>
+
+    <string name="menu_user">User</string>
+    <string name="menu_album">Album</string>
+    <string name="menu_photo">Photo</string>
+
 </resources>

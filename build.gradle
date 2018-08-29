@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    
+
     repositories {
         google()
         jcenter()
@@ -11,10 +11,12 @@ buildscript {
         maven {
             url 'https://jitpack.io'
         }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.0-alpha07'
-        
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -30,6 +32,9 @@ allprojects {
         }
         maven {
             url 'https://jitpack.io'
+        }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
         }
     }
 }
@@ -49,7 +54,7 @@ ext {
 
     // App Dependencies
     supportLibraryVersion = '27.1.1'
-    butterKnifeVersion = '8.8.1'
+    butterKnifeVersion = '9.0.0-SNAPSHOT'
     rxJavaVersion = '2.1.6'
     rxAndroidVersion = '2.0.1'
     lifecycleVersion = '1.1.1'
